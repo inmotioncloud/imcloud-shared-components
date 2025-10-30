@@ -10,7 +10,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --project tsconfig.json"
+    "build": "tsc --project tsconfig.json && node scripts/copy-assets.mjs"
   },
   "peerDependencies": {
     "react": "^18.0.0",
