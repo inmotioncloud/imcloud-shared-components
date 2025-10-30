@@ -130,7 +130,6 @@ export const Header: React.FC<HeaderProps> = ({
           <Button
             variant="primary"
             size="sm"
-            className="primary-button"
             onClick={handleCtaClick}
             type="button"
           >
