@@ -16,6 +16,30 @@ const defaultSections: Section[] = [
   { id: "pricing", label: "Pricing" }
 ];
 
+type LogoSource = string | { src?: string } | { default?: string }
+
+const resolveLogoSrc = (value: unknown): string | undefined => {
+  if (!value) {
+    return undefined;
+  }
+
+  if (typeof value === "string") {
+    return value;
+  }
+
+  if (typeof value === "object" && value !== null) {
+    if ("src" in value && typeof (value as { src?: unknown }).src === "string") {
+      return (value as { src: string }).src;
+    }
+
+    if ("default" in value && typeof (value as { default?: unknown }).default === "string") {
+      return (value as { default: string }).default;
+    }
+  }
+
+  return undefined;
+};
+
 export type HeaderProps = {
   sections?: Section[];
   supportHref?: string | null;
@@ -25,7 +49,7 @@ export type HeaderProps = {
   ctaLabel?: string;
   onSectionNavigate?: (sectionId: string) => void;
   onCtaClick?: () => void;
-  logoSrc?: string;
+  logoSrc?: LogoSource;
   logoAltText?: string;
   className?: string;
   containerClassName?: string;
@@ -49,6 +73,11 @@ export const Header: React.FC<HeaderProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const resolvedLogoSrc =
+    resolveLogoSrc(logoSrc) ??
+    resolveLogoSrc(defaultLogo) ??
+    (typeof defaultLogo === "string" ? defaultLogo : undefined);
 
   const scrollToSection = React.useCallback((sectionId: string) => {
     if (typeof document === "undefined") {
@@ -103,7 +132,9 @@ export const Header: React.FC<HeaderProps> = ({
         )}
       >
         <div className="flex items-center">
-          <img src={logoSrc ?? defaultLogo} alt={logoAltText} className="h-[46px] w-auto" />
+          {resolvedLogoSrc ? (
+            <img src={resolvedLogoSrc} alt={logoAltText} className="h-[46px] w-auto" />
+          ) : null}
         </div>
 
         <nav className="hidden md:flex items-center space-x-8">
