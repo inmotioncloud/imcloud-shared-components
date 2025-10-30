@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "declaration": true,
+    "emitDeclarationOnly": false,
+    "composite": false,
+    "noEmit": false,
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2020",
+    "types": ["react"],
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src"]
+}
