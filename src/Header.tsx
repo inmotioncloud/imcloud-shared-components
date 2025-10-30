@@ -97,12 +97,24 @@ export const Header: React.FC<HeaderProps> = ({
         return;
       }
 
-      if (location.pathname !== "/") {
-        navigate("/", { state: { scrollTo: sectionId } });
+      const targetHash = `#${sectionId}`;
+      const targetPath = `/${targetHash}`;
+
+      if (location.pathname === "/") {
+        scrollToSection(sectionId);
+        if (typeof window !== "undefined") {
+          window.history.replaceState(null, "", targetHash);
+        }
         return;
       }
 
-      scrollToSection(sectionId);
+      try {
+        navigate(targetPath);
+      } catch (error) {
+        if (typeof window !== "undefined") {
+          window.location.assign(targetPath);
+        }
+      }
     },
     [location.pathname, navigate, onSectionNavigate, scrollToSection]
   );
