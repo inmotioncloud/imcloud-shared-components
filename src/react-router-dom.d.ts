@@ -5,7 +5,9 @@ declare module 'react-router-dom' {
   }
 
   type LocationLike = {
+    hash?: string
     pathname: string
+    search?: string
     state?: Record<string, unknown> | null
   }
 
