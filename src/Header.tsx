@@ -74,6 +74,20 @@ export const Header: React.FC<HeaderProps> = ({
   const navigate = useNavigate();
   const location = useLocation();
 
+  const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
+  const toggleMobileMenu = React.useCallback(() => {
+    setMobileMenuOpen((prev) => !prev);
+  }, []);
+
+  const closeMobileMenu = React.useCallback(() => {
+    setMobileMenuOpen(false);
+  }, []);
+
+  React.useEffect(() => {
+    closeMobileMenu();
+  }, [closeMobileMenu, location.hash, location.pathname, location.search]);
+
   const resolvedLogoSrc =
     resolveLogoSrc(logoSrc) ??
     resolveLogoSrc(defaultLogo) ??
@@ -128,6 +142,19 @@ export const Header: React.FC<HeaderProps> = ({
     handleSectionNavigation("request-access");
   }, [handleSectionNavigation, onCtaClick]);
 
+  const handleMobileSectionClick = React.useCallback(
+    (sectionId: string) => {
+      closeMobileMenu();
+      handleSectionNavigation(sectionId);
+    },
+    [closeMobileMenu, handleSectionNavigation]
+  );
+
+  const handleMobileCtaClick = React.useCallback(() => {
+    closeMobileMenu();
+    handleCtaClick();
+  }, [closeMobileMenu, handleCtaClick]);
+
   const navLinkClass = cn("text-gray-900 hover:text-gray-600 transition-colors", navLinkClassName);
 
   return (
@@ -139,7 +166,7 @@ export const Header: React.FC<HeaderProps> = ({
     >
       <div
         className={cn(
-          "container mx-auto px-6 py-4 flex items-center justify-between",
+          "container mx-auto px-6 py-4 flex items-center justify-between gap-4",
           containerClassName
         )}
       >
@@ -149,37 +176,113 @@ export const Header: React.FC<HeaderProps> = ({
           ) : null}
         </div>
 
-        <nav className="hidden md:flex items-center space-x-8">
+        <div className="flex items-center gap-4">
+          <button
+            aria-controls="mobile-navigation"
+            aria-expanded={mobileMenuOpen}
+            className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-md border border-gray-200 text-gray-900 transition hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+            onClick={toggleMobileMenu}
+            type="button"
+          >
+            <span className="sr-only">Toggle navigation</span>
+            <svg
+              aria-hidden="true"
+              className="h-5 w-5"
+              fill="none"
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              viewBox="0 0 24 24"
+            >
+              {mobileMenuOpen ? (
+                <path d="M6 6l12 12M6 18L18 6" />
+              ) : (
+                <path d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
+
+          <nav className="hidden md:flex items-center space-x-8">
+            {sections.map((section) => (
+              <button
+                key={section.id}
+                onClick={() => handleSectionNavigation(section.id)}
+                className={navLinkClass}
+                type="button"
+              >
+                {section.label}
+              </button>
+            ))}
+            {supportHref ? (
+              <a href={supportHref} className={navLinkClass}>
+                {supportLabel}
+              </a>
+            ) : null}
+            {blogHref ? (
+              <a href={blogHref} className={navLinkClass}>
+                {blogLabel}
+              </a>
+            ) : null}
+            <Button
+              variant="primary"
+              size="sm"
+              onClick={handleCtaClick}
+              type="button"
+            >
+              {ctaLabel}
+            </Button>
+          </nav>
+        </div>
+      </div>
+
+      <nav
+        aria-hidden={!mobileMenuOpen}
+        className={cn(
+          "md:hidden border-t border-gray-200 bg-white",
+          mobileMenuOpen ? "block" : "hidden"
+        )}
+        id="mobile-navigation"
+      >
+        <div className="container mx-auto flex flex-col gap-4 px-6 py-4">
           {sections.map((section) => (
             <button
-              key={section.id}
-              onClick={() => handleSectionNavigation(section.id)}
-              className={navLinkClass}
+              key={`mobile-${section.id}`}
+              onClick={() => handleMobileSectionClick(section.id)}
+              className={cn(navLinkClass, "w-full text-left text-base")}
               type="button"
             >
               {section.label}
             </button>
           ))}
           {supportHref ? (
-            <a href={supportHref} className={navLinkClass}>
+            <a
+              href={supportHref}
+              onClick={closeMobileMenu}
+              className={cn(navLinkClass, "text-base")}
+            >
               {supportLabel}
             </a>
           ) : null}
           {blogHref ? (
-            <a href={blogHref} className={navLinkClass}>
+            <a
+              href={blogHref}
+              onClick={closeMobileMenu}
+              className={cn(navLinkClass, "text-base")}
+            >
               {blogLabel}
             </a>
           ) : null}
           <Button
-            variant="primary"
-            size="sm"
-            onClick={handleCtaClick}
+            className="w-full"
+            onClick={handleMobileCtaClick}
             type="button"
+            variant="primary"
           >
             {ctaLabel}
           </Button>
-        </nav>
-      </div>
+        </div>
+      </nav>
     </header>
   );
 };
