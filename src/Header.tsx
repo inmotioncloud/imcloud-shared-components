@@ -160,9 +160,10 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <header
       className={cn(
-        "fixed top-0 left-0 right-0 z-50 bg-white backdrop-blur-sm border-b border-gray-200",
+        "fixed left-0 right-0 z-50 bg-white backdrop-blur-sm border-b border-gray-200",
         className
       )}
+      style={{ top: "var(--payload-admin-bar-offset, 0px)" }}
     >
       <div
         className={cn(
