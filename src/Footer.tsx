@@ -40,7 +40,7 @@ export type FooterProps = {
 };
 
 export const Footer: React.FC<FooterProps> = ({
-  title = "IMCloud",
+  title = "InMotion Cloud",
   tagline = "The AI First Managed Cloud Platform",
   copyright = "© 2025 InMotion Cloud. All Rights Reserved.",
   legalNotice = defaultLegalNotice,
