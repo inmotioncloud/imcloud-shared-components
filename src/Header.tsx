@@ -173,7 +173,9 @@ export const Header: React.FC<HeaderProps> = ({
       >
         <div className="flex items-center">
           {resolvedLogoSrc ? (
-            <img src={resolvedLogoSrc} alt={logoAltText} className="h-[46px] w-auto" />
+            <a href="/" aria-label="Return to homepage" className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded">
+              <img src={resolvedLogoSrc} alt={logoAltText} className="h-[46px] w-auto" />
+            </a>
           ) : null}
         </div>
 
@@ -211,6 +213,8 @@ export const Header: React.FC<HeaderProps> = ({
                 onClick={() => handleSectionNavigation(section.id)}
                 className={navLinkClass}
                 type="button"
+                role="link"
+                aria-label={`Navigate to ${section.label} section`}
               >
                 {section.label}
               </button>
@@ -252,6 +256,8 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => handleMobileSectionClick(section.id)}
               className={cn(navLinkClass, "w-full text-left text-base")}
               type="button"
+              role="link"
+              aria-label={`Navigate to ${section.label} section`}
             >
               {section.label}
             </button>
