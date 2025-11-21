@@ -30,13 +30,8 @@ const defaultLegalNotice = (
     {" "}
     <button
       type="button"
-      className="cookie-setting-link underline hover:text-primary-foreground/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded"
+      className="ot-sdk-show-settings cookie-setting-link underline hover:text-primary-foreground/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground focus-visible:ring-offset-2 focus-visible:ring-offset-primary rounded"
       aria-label="Manage cookie preferences"
-      onClick={() => {
-        if (typeof window !== 'undefined' && (window as any).OneTrust) {
-          (window as any).OneTrust.ToggleInfoDisplay();
-        }
-      }}
     >
       Cookie Settings
     </button>
